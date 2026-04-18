@@ -1,0 +1,80 @@
+/* Dash dcc.Dropdown (react-select v1) theme tweaks for dark UI.
+   Ensures selected value + options are readable everywhere. */
+
+.Select {
+  font-family: Barlow, sans-serif !important;
+}
+
+.Select-control {
+  background-color: #16213E !important; /* CARD2 */
+  border: 1px solid #2A2A3E !important;
+  box-shadow: none !important;
+  min-height: 38px !important;
+  height: 38px !important;
+}
+
+.Select-control:hover {
+  border-color: #2A2A3E !important;
+}
+
+.Select.is-focused > .Select-control {
+  background-color: #16213E !important; /* CARD2 */
+  border-color: #2A2A3E !important;
+  box-shadow: none !important;
+}
+
+.Select-placeholder,
+.Select--single > .Select-control .Select-value,
+.Select--single > .Select-control .Select-value-label,
+.Select-input,
+.Select-input > input,
+.Select-value-label {
+  color: #FFFFFF !important; /* WHITE */
+  font-family: Barlow, sans-serif !important;
+}
+
+.Select--single > .Select-control .Select-value,
+.Select-placeholder {
+  line-height: 36px !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+.Select-input {
+  height: 36px !important;
+}
+
+.Select-option,
+.VirtualizedSelectOption {
+  background-color: #1A1A2E !important; /* CARD */
+  color: #FFFFFF !important; /* WHITE */
+  font-family: Barlow, sans-serif !important;
+}
+
+.Select-menu-outer {
+  background-color: #1A1A2E !important; /* CARD */
+  border: 1px solid #2A2A3E !important;
+  color: #FFFFFF !important; /* WHITE */
+  font-family: Barlow, sans-serif !important;
+}
+
+.Select-option.is-focused,
+.VirtualizedSelectFocusedOption {
+  background-color: #16213E !important; /* CARD2 */
+  color: #FFFFFF !important;
+}
+
+.Select-option.is-selected {
+  background-color: #16213E !important; /* CARD2 */
+  color: #FFCF00 !important; /* GOLD */
+}
+
+.Select-option.is-disabled,
+.VirtualizedSelectOption[aria-disabled="true"] {
+  color: #6B7280 !important; /* GREY */
+}
+
+.Select-arrow-zone,
+.Select-clear-zone {
+  color: #FFFFFF !important;
+}

@@ -1,0 +1,138 @@
+/* Global readability */
+html,
+body {
+  font-family: "Barlow", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/*
+  Dash dcc.Dropdown styling.
+  Dash 2.x can expose either legacy react-select classnames (.Select-*)
+  and/or newer react-select classnames (.Select__*). We style both.
+
+  Colors match the existing app palette:
+  - CARD  #1A1A2E
+  - CARD2 #16213E
+  - DARK  #1C1C2E
+  - GREY  #6B7280
+  - WHITE #FFFFFF
+  - Border #2A2A3E
+*/
+
+/* Legacy react-select (commonly used by Dash dcc.Dropdown) */
+.Select-control {
+  background-color: #16213E !important;
+  border: 1px solid #2A2A3E !important;
+  box-shadow: none !important;
+}
+
+.Select-control:hover {
+  border-color: #2A2A3E !important;
+}
+
+.Select-placeholder {
+  color: #6B7280 !important;
+}
+
+.Select--single > .Select-control .Select-value,
+.Select-value-label {
+  color: #FFFFFF !important;
+}
+
+.Select-input > input {
+  color: #FFFFFF !important;
+}
+
+.Select-menu-outer {
+  background-color: #16213E !important;
+  border: 1px solid #2A2A3E !important;
+  box-shadow: none !important;
+}
+
+.Select-option {
+  background-color: #16213E !important;
+  color: #FFFFFF !important;
+}
+
+.Select-option.is-focused {
+  background-color: #1A1A2E !important;
+  color: #FFFFFF !important;
+}
+
+.Select-option.is-selected {
+  background-color: #1A1A2E !important;
+  color: #FFFFFF !important;
+  font-weight: 700;
+}
+
+.VirtualizedSelectOption {
+  background-color: #16213E !important;
+  color: #FFFFFF !important;
+}
+
+.VirtualizedSelectFocusedOption {
+  background-color: #1A1A2E !important;
+  color: #FFFFFF !important;
+}
+
+.Select-arrow {
+  border-color: #6B7280 transparent transparent !important;
+}
+
+.Select-clear-zone,
+.Select-arrow-zone {
+  color: #6B7280 !important;
+}
+
+/* Newer react-select classnames (future-proofing) */
+.Select__control {
+  background-color: #16213E !important;
+  border-color: #2A2A3E !important;
+  box-shadow: none !important;
+}
+
+.Select__single-value {
+  color: #FFFFFF !important;
+}
+
+.Select__placeholder {
+  color: #6B7280 !important;
+}
+
+.Select__input-container,
+.Select__input-container input {
+  color: #FFFFFF !important;
+}
+
+.Select__menu {
+  background-color: #16213E !important;
+  border: 1px solid #2A2A3E !important;
+  box-shadow: none !important;
+}
+
+.Select__option {
+  background-color: #16213E !important;
+  color: #FFFFFF !important;
+}
+
+.Select__option--is-focused {
+  background-color: #1A1A2E !important;
+  color: #FFFFFF !important;
+}
+
+.Select__option--is-selected {
+  background-color: #1A1A2E !important;
+  color: #FFFFFF !important;
+  font-weight: 700;
+}
+
+.Select__indicator,
+.Select__dropdown-indicator,
+.Select__clear-indicator {
+  color: #6B7280 !important;
+}
+
+.Select__indicator-separator {
+  background-color: #2A2A3E !important;
+}
