@@ -10,10 +10,11 @@ Built with **Python**, **Dash**, **Plotly**, and **pandas**.
 
 This project analyzes Brentford FC's performance from the 2021/22 season through to 2025/26. The goal is to explore match results, team statistics, and player performance to understand how the club has evolved over recent seasons.
 
-The project has two parts:
+The project has three parts:
 
 1. **Dashboard** — a multi-page interactive web app for exploring the data visually.
 2. **Notebook** — a Jupyter notebook for exploratory data analysis and experimentation.
+3. **AI Assistant Coach** — an LLM-powered Streamlit app acting as a professional football coach that can answer queries about Brentford's data.
 
 **Students:** Ahmed Chakcha – Mohamed Ali Djemal  
 **Course:** Data Analysis  
@@ -27,6 +28,12 @@ The project has two parts:
 ```
 Top_eleven/
 ├── README.md                          # This file
+├── assistant_coach/                   # AI Assistant Coach module
+│   ├── app.py                         # Streamlit chat interface
+│   ├── agent.py                       # LangChain agent and LLM setup
+│   ├── tools.py                       # Custom tools for data and web search
+│   ├── requirements.txt               # Dependencies for the AI coach
+│   └── README.md                      # AI coach documentation
 ├── dashboard/
 │   ├── app.py                         # Main Dash application (layouts + callbacks)
 │   ├── requirements.txt               # Python dependencies
@@ -75,6 +82,17 @@ python3 dashboard/app.py
 Open **http://localhost:8050** in your browser.
 
 To use a different port, change `port=8050` in the last line of `dashboard/app.py`.
+
+### Running the AI Assistant Coach
+
+The Assistant Coach runs on Streamlit and requires its own dependencies and an `.env` file with API keys (e.g., `GEMINI_API_KEY`, `TAVILY_API_KEY`).
+
+```bash
+python3 -m pip install -r assistant_coach/requirements.txt
+streamlit run assistant_coach/app.py
+```
+
+Open the local URL provided by Streamlit in your browser.
 
 ---
 
