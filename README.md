@@ -26,21 +26,35 @@ The project is divided into three main pillars:
 ```
 Top_eleven/
 ├── README.md                          # This file
+├── data/                              # 📊 Centralized data folder
+│   ├── brentford_2021_2026.csv        # Main dataset (single source of truth)
+│   └── README.md                      # Data documentation
 ├── assistant_coach/                   # 🤖 AI Assistant Coach module
 │   ├── app.py                         # Streamlit chat interface
-│   ├── agent.py                       # LangChain agent and Groq LLM setup
-│   ├── tools.py                       # Custom RAG tools (stats, injuries, weather, news)
-│   ├── brentford_2021_2026.csv        # Dataset for the AI Coach
+│   ├── agent.py                       # Groq LLM agent setup
+│   ├── tools.py                       # Custom tools (stats, injuries, weather, news)
 │   ├── requirements.txt               # Dependencies for the AI coach
 │   └── README.md                      # Detailed AI coach documentation
+├── assistant_coach_langchain/         # 🤖 LangChain AI Assistant Coach
+│   ├── app.py                         # Streamlit chat interface
+│   ├── agent.py                       # LangChain ReAct agent
+│   ├── tools.py                       # LangChain tools
+│   ├── config.py                      # Configuration and prompts
+│   ├── requirements.txt               # Dependencies
+│   └── README.md                      # LangChain documentation
 ├── dashboard/                         # 📊 Dash Analytics Dashboard module
 │   ├── app.py                         # Main Dash application (layouts + callbacks)
-│   ├── brentford_2021_2026.csv        # Dataset for the Dashboard
 │   ├── requirements.txt               # Dependencies for the Dashboard
 │   ├── README.md                      # Detailed Dashboard documentation
 │   └── assets/                        # CSS styles for the dashboard
-└── notebooks/                         # 📓 Jupyter Notebooks
-    └── Brentford_analytics.ipynb      # Exploratory analysis notebook
+├── notebooks/                         # 📓 Jupyter Notebooks
+│   └── Brentford_analytics.ipynb      # Exploratory analysis notebook
+├── docs/                              # 📚 Documentation
+│   └── PROJECT_ANALYSIS.md            # Technical analysis and data techniques
+├── .env                               # Environment variables (not in git)
+├── .env.example                       # Environment template
+├── pyproject.toml                     # uv package manager configuration
+└── .gitignore                         # Git ignore rules
 ```
 
 ---

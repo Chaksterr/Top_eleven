@@ -3,6 +3,11 @@ from dash import dcc, html, Input, Output, State, dash_table
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 import pandas as pd
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 RED = "#D0021B"
 GOLD = "#FFCF00"
@@ -14,11 +19,26 @@ BG = "#0F0F1A"
 CARD = "#1A1A2E"
 CARD2= "#16213E"
 
-import os
-for path in ["brentford_2021_2026.csv", os.path.join(os.path.dirname(__file__), "brentford_2021_2026.csv")]:
+# ── Load CSV with fallback paths ───────────────────────────────────────────────
+csv_paths = [
+    os.getenv("DASHBOARD_CSV_PATH", "data/brentford_2021_2026.csv"),
+    "data/brentford_2021_2026.csv",  # Centralized data folder
+    "brentford_2021_2026.csv",
+    os.path.join(os.path.dirname(__file__), "brentford_2021_2026.csv")
+]
+
+df = None
+for path in csv_paths:
     if os.path.exists(path):
+        print(f"✓ Loading CSV from: {path}")
         df = pd.read_csv(path)
         break
+
+if df is None:
+    raise FileNotFoundError(
+        f"Could not find Brentford dataset. Tried paths: {csv_paths}\n"
+        f"Please ensure the CSV file exists or set DASHBOARD_CSV_PATH in .env"
+    )
 
 df['date'] = pd.to_datetime(df['date'])
 df['result_win'] = (df['result'] == 'W').astype(int)
