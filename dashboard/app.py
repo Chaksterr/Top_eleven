@@ -590,7 +590,7 @@ def cb_team(season):
     tot = len(d); w = int(d['result_win'].sum())
     kpis = [
         kpi_box("Matches", tot), kpi_box("Wins", w, GREEN), kpi_box("Win Rate", f"{w/tot*100:.0f}%", GOLD),
-        kpi_box("Avg GF", f"{d['goals_for'].mean():.2f}", RED), kpi_box("Avg GA", f"{d['goals_against'].mean():.2f}", GREY),
+        kpi_box("Avg GF", f"{d['goals_for'].mean():.2f}", GOLD), kpi_box("Avg GA", f"{d['goals_against'].mean():.2f}", RED),
         kpi_box("Clean Sheets",int((d['goals_against']==0).sum()), WHITE),
     ]
     res = d.groupby(['season','result']).size().unstack(fill_value=0).reindex(SEASONS)
