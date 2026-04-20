@@ -50,36 +50,159 @@ Top_eleven/
 The Dashboard and the AI Assistant Coach are built as independent modules. You can run one or both depending on what you want to explore.
 
 ### 1. Prerequisites
-- Python 3.x
-- pip
 
-It is recommended to use a virtual environment:
+- **Python 3.12+** (check with `python3 --version`)
+- **uv** — Fast Python package manager (replaces pip, poetry, etc.)
+
+#### Install uv
+
+If you don't have `uv` installed, install it using one of these methods:
+
+**macOS/Linux:**
 ```bash
-python3 -m venv .venv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+**Windows (PowerShell):**
+```powershell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+**Or using Homebrew (macOS):**
+```bash
+brew install uv
+```
+
+**Or using pip:**
+```bash
+pip install uv
+```
+
+Verify installation:
+```bash
+uv --version
+```
+
+### 2. Project Setup with uv
+
+#### Option A: Quick Setup (Recommended)
+
+```bash
+# Clone or navigate to the project directory
+cd top_eleven
+
+# Initialize uv project (if not already done)
+uv init
+
+# Install all dependencies
+uv sync
+
+# Activate the virtual environment
 source .venv/bin/activate
 # On Windows use: .\.venv\Scripts\Activate.ps1
 ```
 
-### 2. Running the Interactive Dashboard
+#### Option B: Manual Setup
+
+```bash
+# Create and activate virtual environment
+uv venv .venv
+source .venv/bin/activate
+# On Windows use: .\.venv\Scripts\Activate.ps1
+
+# Install dependencies from pyproject.toml
+uv pip install -e .
+
+# Or install specific module dependencies
+uv pip install -r dashboard/requirements.txt
+uv pip install -r assistant_coach/requirements.txt
+```
+
+### 3. Environment Configuration
+
+Create a `.env` file in the project root with your API keys:
+
+```bash
+# Copy the template
+cp .env.example .env
+
+# Edit .env and add your API keys
+# REQUIRED:
+GROQ_API_KEY=your_groq_api_key_here
+
+# OPTIONAL (for enhanced features):
+APIFOOTBALL_KEY=your_api_football_key_here
+TAVILY_KEY=your_tavily_api_key_here
+```
+
+**Get API Keys:**
+- **Groq** (required): https://console.groq.com (free tier available)
+- **API-Football** (optional): https://api-sports.io (free tier available)
+- **Tavily** (optional): https://tavily.com (free tier available)
+
+### 4. Running the Interactive Dashboard
 
 The dashboard provides a visual overview of team and player performance.
 
 ```bash
-python3 -m pip install -r dashboard/requirements.txt
-python3 dashboard/app.py
+# Using uv run (recommended)
+uv run python dashboard/app.py
+
+# Or if virtual environment is activated
+python dashboard/app.py
 ```
+
 *Open **http://localhost:8050** in your browser.*
 
-### 3. Running the AI Assistant Coach
+**Dashboard Features:**
+- 🏟️ Team Overview — Season KPIs, results distribution, goals trends
+- 👤 Player Profiling — Individual stats, radar charts, comparisons
+- 📈 Season Stats — Match-by-match breakdown, top performers
+- 📖 Project Overview — Dataset info and color guide
 
-The Assistant Coach uses Groq (llama-3.3-70b) and requires an `.env` file with API keys (e.g., `GROQ_API_KEY`, and optionally `APIFOOTBALL_KEY`, `TAVILY_KEY`).
+### 5. Running the AI Assistant Coach
+
+The Assistant Coach uses Groq (llama-3.3-70b) for tactical analysis and requires the `.env` file configured.
 
 ```bash
-# Ensure you are in the project root
-python3 -m pip install -r assistant_coach/requirements.txt
+# Using uv run (recommended)
+uv run streamlit run assistant_coach/app.py
+
+# Or if virtual environment is activated
 streamlit run assistant_coach/app.py
 ```
+
 *Open the Local URL provided by Streamlit (usually **http://localhost:8501**) in your browser.*
+
+**AI Coach Features:**
+- 🤖 Natural language queries about squad, form, and tactics
+- 📋 Automatic starting 11 selection with tactical reasoning
+- ⚡ Fatigue analysis and rest recommendations
+- 🌦️ Weather-aware tactical adjustments
+- 🔄 Real-time injury updates and news context
+
+**Example Queries:**
+- *"Pick the best starting 11 vs Arsenal away on Saturday"*
+- *"Who needs rest this week?"*
+- *"Compare Toney and Igor Thiago this season"*
+- *"Who are our top performers in the last 5 matches?"*
+
+### 6. Running the Jupyter Notebook
+
+For exploratory data analysis:
+
+```bash
+# Install Jupyter kernel for the project
+uv pip install ipykernel
+
+# Start Jupyter
+uv run jupyter notebook
+
+# Or if virtual environment is activated
+jupyter notebook
+```
+
+Then open `notebooks/Brentford_analytics.ipynb`
 
 ---
 
@@ -132,12 +255,90 @@ Both modules rely on the `brentford_2021_2026.csv` dataset, which contains **pla
 
 ---
 
+## 🛠️ Common Commands with uv
+
+```bash
+# Sync dependencies (install/update)
+uv sync
+
+# Add a new package
+uv pip install package_name
+
+# Remove a package
+uv pip uninstall package_name
+
+# Run a command in the virtual environment
+uv run python script.py
+uv run streamlit run app.py
+
+# Activate virtual environment manually
+source .venv/bin/activate          # macOS/Linux
+.\.venv\Scripts\Activate.ps1       # Windows PowerShell
+
+# Deactivate virtual environment
+deactivate
+
+# Update all dependencies
+uv pip install --upgrade -r pyproject.toml
+
+# Create a lock file for reproducibility
+uv lock
+```
+
+---
+
 ## ❓ Troubleshooting
 
-- **`ModuleNotFoundError`** — Ensure you installed the correct requirements file for the module you are trying to run (`dashboard/requirements.txt` or `assistant_coach/requirements.txt`).
-- **CSV not found** — Ensure the dataset is present in the respective module's folder.
-- **Port already in use** — For Dash, change `port=8050` in `dashboard/app.py`. For Streamlit, pass `--server.port 8502` when running.
-- **Missing API Keys** — Ensure your `.env` file is properly configured in the project root or `.env` file when running the AI coach.
+### Installation Issues
+
+| Issue | Solution |
+|-------|----------|
+| **`uv: command not found`** | Install uv: `curl -LsSf https://astral.sh/uv/install.sh \| sh` |
+| **`ModuleNotFoundError`** | Run `uv sync` to install all dependencies |
+| **`Python 3.12+ required`** | Check Python version: `python3 --version`. Update if needed. |
+| **Virtual env not activating** | Use `uv run` instead, or check activation command for your OS |
+
+### Runtime Issues
+
+| Issue | Solution |
+|-------|----------|
+| **CSV not found** | Ensure `brentford_2021_2026.csv` exists in `dashboard/` and `assistant_coach/` folders |
+| **Port already in use** | Change port in code: `app.run(port=8051)` for Dash or `--server.port 8502` for Streamlit |
+| **Missing API Keys** | Create `.env` file: `cp .env.example .env` and add your Groq API key |
+| **`GROQ_API_KEY not found`** | Ensure `.env` file is in project root and contains `GROQ_API_KEY=your_key` |
+| **Streamlit not starting** | Try: `uv run streamlit run assistant_coach/app.py --logger.level=debug` |
+
+### API Issues
+
+| Issue | Solution |
+|-------|----------|
+| **Rate limit errors** | The AI Coach automatically falls back to a smaller model. Wait a moment and retry. |
+| **Injuries/News not loading** | These are optional. Add `APIFOOTBALL_KEY` and `TAVILY_KEY` to `.env` for full features. |
+| **Weather data missing** | Open-Meteo is free and doesn't require a key. Check your internet connection. |
+
+---
+
+## 📚 Additional Resources
+
+- **Project Analysis**: See `docs/PROJECT_ANALYSIS.md` for detailed technical documentation
+- **Dashboard Docs**: See `dashboard/README.md` for dashboard-specific features
+- **AI Coach Docs**: See `assistant_coach/README.md` for AI coach details
+- **uv Documentation**: https://docs.astral.sh/uv/
+- **Groq Console**: https://console.groq.com
+
+---
+
+## 🤝 Contributing
+
+This is an academic project for the Data Analysis course (2025–2026). For questions or improvements, contact the project authors:
+- Ahmed Chakcha
+- Mohamed Ali Djemal
+
+---
+
+## 📄 License
+
+This project is provided as-is for educational purposes.
 
 ---
 

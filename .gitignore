@@ -1,20 +1,159 @@
+# ============================================================================
+# Virtual Environments
+# ============================================================================
 .venv/
 .env
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
+.env.local
+.env.*.local
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
-.ipynb_checkpoints/
-.DS_Store
+.Python
+
+# ============================================================================
+# Python
+# ============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ============================================================================
+# Testing & Coverage
+# ============================================================================
 .pytest_cache/
 .coverage
+.coverage.*
 htmlcov/
+.tox/
+.hypothesis/
+*.cover
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+
+# ============================================================================
+# Jupyter Notebooks
+# ============================================================================
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+.jupyter/
+*.ipynb
+
+# ============================================================================
+# IDEs & Editors
+# ============================================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.AppleDouble
+.LSOverride
+*.sublime-project
+*.sublime-workspace
+.project
+.pydevproject
+.settings/
+*.code-workspace
+.history/
+
+# ============================================================================
+# OS-specific
+# ============================================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.lnk
+
+# ============================================================================
+# Project-specific
+# ============================================================================
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.prod
+
+# API Keys & Secrets (never commit these!)
+.groq_key
+.api_key
+secrets.json
+credentials.json
+
+# Streamlit cache
+.streamlit/
+.streamlit/secrets.toml
+
+# Dash cache
+.dash_cache/
+
+# Plotly cache
+.plotly/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.log
+logs/
+
+# Data files (optional - uncomment if needed)
+# *.csv
+# *.xlsx
+# *.json
+
+# Cache directories
+.cache/
+*.cache
+
+# ============================================================================
+# uv (Python package manager)
+# ============================================================================
+.uv/
+uv.lock
+
+# ============================================================================
+# Build & Distribution
+# ============================================================================
 dist/
 build/
 *.egg-info/
+.eggs/
+*.whl
+
+# ============================================================================
+# Documentation
+# ============================================================================
+site/
+docs/_build/
+.sphinx/
+docs/
