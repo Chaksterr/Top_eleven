@@ -1,79 +1,55 @@
-# 🐝 Brentford FC — Assistant Coach Agent
+# 🐝 Brentford FC Assistant Coach - LangChain Version
 
-AI assistant coach powered by **Groq (llama-3.3-70b)**.
-Picks the best starting 11 based on current season (25/26) data,
-injuries, news and weather.
+AI-powered tactical assistant using **LangChain** framework with **xAI Grok** LLM.
 
----
+## Features
+
+- 🤖 LangChain agent with tool orchestration
+- 💬 Conversation memory for context-aware responses
+- 🔧 Modular tool system for squad analysis
+- 📊 Real-time data integration (injuries, weather, news)
+- ⚡ Streamlit chat interface
+
+## Architecture
+
+```
+assistant_coach_langchain/
+├── app.py              # Streamlit frontend
+├── agent.py            # LangChain agent setup
+├── tools.py            # LangChain tools (squad analysis)
+├── memory.py           # Conversation memory management
+├── config.py           # Configuration and prompts
+└── requirements.txt    # Dependencies
+```
 
 ## Setup
 
-### 1 — Place your CSV next to app.py
-```
-brentford_agent/
-├── app.py
-├── agent.py
-├── tools.py
-├── requirements.txt
-└── brentford_2021_2026_clean.csv
-```
-
-### 2 — Create .env file
-```
-GROQ_API_KEY=your_key          # required — free at console.groq.com
-APIFOOTBALL_KEY=your_key       # optional — free at api-sports.io
-TAVILY_KEY=your_key            # optional — free at tavily.com
-```
-
-### 3 — Install
 ```bash
-pip install -r requirements.txt
+# Copy the root .env.example to .env
+cp .env.example .env
+
+# Edit .env and add your xAI API key
+# XAI_API_KEY=xai-your_actual_key_here
+
+# Sync dependencies (LangChain packages already in pyproject.toml)
+uv sync
+
+# Run
+uv run streamlit run assistant_coach_langchain/app.py
 ```
 
-### 4 — Run
-```bash
-streamlit run app.py
-```
+## Usage
 
-### 5 — Open
-```
-http://localhost:8501
-```
-
----
-
-## How it works
-
-```
-Coach question
-      ↓
-Groq LLM makes a plan
-      ↓
-Calls tools in sequence:
-  squad_overview → get_injuries → rank_position
-  → fatigue_check → search_news → match_weather
-      ↓
-LLM reasons over all results
-      ↓
-Starting 11 + reasons + bench options
-```
-
-## Tools
-
-| Tool | Data | Purpose |
-|------|------|---------|
-| squad_overview | CSV 25/26 | Full squad form + fatigue |
-| player_form | CSV 25/26 | Last N match stats |
-| fatigue_check | CSV 25/26 | Minutes last 3 games |
-| rank_position | CSV 25/26 | Best player per position |
-| compare_two | CSV 25/26 | Side-by-side comparison |
-| get_injuries | API-Football | Unavailable players |
-| search_news | Tavily | Latest news |
-| match_weather | Open-Meteo | Match conditions (free) |
-
-## Example questions
-- "Pick the best starting 11 vs Arsenal away on Saturday"
+Ask tactical questions:
+- "Pick the best starting 11 vs Arsenal"
 - "Who needs rest this week?"
-- "Compare Toney and Igor Thiago this season"
-- "Who are our top performers in the last 5 matches?"
-- "What is the weather impact for Saturday's match?"
+- "Compare Toney and Mbeumo"
+- "Analyze our defensive weaknesses"
+
+## LangChain Components
+
+- **Agent**: ReAct agent with tool calling
+- **LLM**: xAI Grok via OpenAI-compatible API
+- **Tools**: Custom LangChain tools for squad analysis
+- **Memory**: ConversationBufferMemory for chat history
+- **Callbacks**: Streamlit callback handler for real-time updates
