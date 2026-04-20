@@ -291,6 +291,178 @@ def match_weather(match_date: str) -> dict:
         return {"error": str(e)}
 
 
+@tool
+def analyze_opponent(opponent_name: str) -> dict:
+    """Analyze opponent team's tactics, strengths, weaknesses, and provide strategic recommendations.
+    Fetches real data from API-Football for team statistics and recent form.
+    Use this tool when asked about how to play against a specific team or what tactics to use.
+    
+    Args:
+        opponent_name: Name of the opponent team (e.g., "Arsenal", "Chelsea", "Liverpool")
+    """
+    api_key = os.getenv("APIFOOTBALL_KEY", "") or os.getenv("FOOTBALLDATA_KEY", "")
+    
+    if not api_key:
+        return {
+            "team": opponent_name,
+            "error": "API-Football key not configured",
+            "note": "Add APIFOOTBALL_KEY to .env for live opponent analysis",
+            "fallback_advice": [
+                "Focus on our tactical strengths",
+                "Maintain defensive discipline",
+                "Exploit counter-attacking opportunities"
+            ]
+        }
+    
+    try:
+        # Premier League team ID mapping (common teams)
+        team_ids = {
+            "arsenal": 42, "chelsea": 49, "liverpool": 40, "manchester city": 50,
+            "manchester united": 33, "tottenham": 47, "newcastle": 34, "aston villa": 66,
+            "brighton": 51, "west ham": 48, "crystal palace": 52, "fulham": 36,
+            "wolves": 39, "everton": 45, "nottingham forest": 65, "bournemouth": 35,
+            "luton": 163, "burnley": 44, "sheffield united": 62, "brentford": 55
+        }
+        
+        opponent_key = opponent_name.lower().strip()
+        team_id = team_ids.get(opponent_key)
+        
+        if not team_id:
+            # Try to search for team
+            search_response = requests.get(
+                "https://v3.football.api-sports.io/teams",
+                headers={"x-apisports-key": api_key},
+                params={"search": opponent_name, "league": 39, "season": 2025},
+                timeout=10
+            )
+            search_data = search_response.json().get("response", [])
+            if search_data:
+                team_id = search_data[0]["team"]["id"]
+            else:
+                return {
+                    "team": opponent_name,
+                    "error": f"Team '{opponent_name}' not found in Premier League",
+                    "note": "Please check the team name spelling"
+                }
+        
+        # Fetch team statistics for current season
+        stats_response = requests.get(
+            "https://v3.football.api-sports.io/teams/statistics",
+            headers={"x-apisports-key": api_key},
+            params={"team": team_id, "season": 2025, "league": 39},
+            timeout=10
+        )
+        stats_data = stats_response.json().get("response", {})
+        
+        # Fetch last 5 fixtures
+        fixtures_response = requests.get(
+            "https://v3.football.api-sports.io/fixtures",
+            headers={"x-apisports-key": api_key},
+            params={"team": team_id, "last": 5, "season": 2025, "league": 39},
+            timeout=10
+        )
+        fixtures_data = fixtures_response.json().get("response", [])
+        
+        # Parse statistics
+        form = stats_data.get("form", "N/A")
+        fixtures_played = stats_data.get("fixtures", {})
+        goals_stats = stats_data.get("goals", {}).get("for", {})
+        goals_against = stats_data.get("goals", {}).get("against", {})
+        
+        # Calculate recent form from fixtures
+        recent_results = []
+        for fixture in fixtures_data[:5]:
+            home_team = fixture["teams"]["home"]["id"]
+            home_goals = fixture["goals"]["home"]
+            away_goals = fixture["goals"]["away"]
+            
+            if home_team == team_id:
+                if home_goals > away_goals:
+                    recent_results.append("W")
+                elif home_goals < away_goals:
+                    recent_results.append("L")
+                else:
+                    recent_results.append("D")
+            else:
+                if away_goals > home_goals:
+                    recent_results.append("W")
+                elif away_goals < home_goals:
+                    recent_results.append("L")
+                else:
+                    recent_results.append("D")
+        
+        recent_form = "-".join(recent_results) if recent_results else form
+        
+        # Build analysis
+        avg_goals_for = goals_stats.get("average", {}).get("total", 0)
+        avg_goals_against = goals_against.get("average", {}).get("total", 0)
+        
+        # Determine strengths and weaknesses based on stats
+        strengths = []
+        weaknesses = []
+        
+        if avg_goals_for and float(avg_goals_for) > 1.5:
+            strengths.append(f"Strong attacking output ({avg_goals_for} goals/game average)")
+        else:
+            weaknesses.append(f"Limited goal threat ({avg_goals_for} goals/game average)")
+        
+        if avg_goals_against and float(avg_goals_against) < 1.0:
+            strengths.append(f"Solid defensive record ({avg_goals_against} conceded/game)")
+        else:
+            weaknesses.append(f"Defensive vulnerabilities ({avg_goals_against} conceded/game)")
+        
+        wins = fixtures_played.get("wins", {}).get("total", 0)
+        played = fixtures_played.get("played", {}).get("total", 1)
+        win_rate = (wins / played * 100) if played > 0 else 0
+        
+        if win_rate > 50:
+            strengths.append(f"Strong win rate ({win_rate:.0f}%)")
+        
+        # Tactical recommendations based on data
+        recommendations = []
+        
+        if avg_goals_against and float(avg_goals_against) > 1.2:
+            recommendations.append("Exploit defensive weaknesses with quick attacks")
+            recommendations.append("Target set-pieces and crosses into the box")
+        
+        if avg_goals_for and float(avg_goals_for) > 1.8:
+            recommendations.append("Deploy compact defensive shape to limit space")
+            recommendations.append("Focus on defensive discipline and organization")
+        
+        recommendations.extend([
+            "Press high when they build from the back",
+            "Quick transitions to exploit counter-attacking opportunities",
+            "Double-mark their key creative players"
+        ])
+        
+        return {
+            "team": opponent_name.title(),
+            "recent_form": recent_form,
+            "matches_played": played,
+            "wins": wins,
+            "win_rate_percent": round(win_rate, 1),
+            "avg_goals_scored": avg_goals_for,
+            "avg_goals_conceded": avg_goals_against,
+            "strengths": strengths if strengths else ["Balanced team profile"],
+            "weaknesses": weaknesses if weaknesses else ["No clear weaknesses identified"],
+            "tactical_recommendations": recommendations,
+            "data_source": "API-Football (live data)"
+        }
+        
+    except requests.exceptions.Timeout:
+        return {
+            "team": opponent_name,
+            "error": "API request timed out",
+            "note": "Try again or check your internet connection"
+        }
+    except Exception as e:
+        return {
+            "team": opponent_name,
+            "error": f"Failed to fetch opponent data: {str(e)}",
+            "note": "Check API key and internet connection"
+        }
+
+
 # Export all tools as a list
 TOOLS = [
     squad_overview,
@@ -300,5 +472,6 @@ TOOLS = [
     compare_two,
     get_injuries,
     search_news,
-    match_weather
+    match_weather,
+    analyze_opponent
 ]

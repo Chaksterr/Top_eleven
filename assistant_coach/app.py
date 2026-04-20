@@ -3,8 +3,8 @@ app.py
 Streamlit chat interface for LangChain-based Brentford Assistant Coach
 """
 
-import streamlit as st
 import datetime
+import streamlit as st
 from config import STREAMLIT_CONFIG
 from agent import run_agent
 
@@ -222,7 +222,7 @@ if user_input:
 
     # Get agent response
     with st.chat_message("assistant", avatar="🐝"):
-        with st.spinner("🐝 Analyzing squad data with LangChain..."):
+        with st.spinner("🐝 Generating tactical insights..."):
             result = run_agent(user_input, ctx)
             answer = result["output"]
         
