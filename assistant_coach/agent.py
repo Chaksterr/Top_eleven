@@ -76,7 +76,8 @@ def run_agent(user_message: str, match_context: str = "") -> dict:
         import traceback
         error_details = traceback.format_exc()
         print(f"🔴 Error: {str(e)}")
+        print(error_details)
         return {
-            "output": f"⚠️ Error: {str(e)}\n\nPlease try rephrasing your question or check your API key.",
+            "output": f"⚠️ Error: {str(e)}\n\nPlease try rephrasing your question or check your API connection.",
             "messages": []
         }
