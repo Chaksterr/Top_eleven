@@ -14,11 +14,6 @@ The project is divided into three main pillars:
 2. **🤖 AI Assistant Coach** — An LLM-powered Streamlit app acting as a professional football coach, capable of answering natural language queries about Brentford's data, injuries, weather, and tactical decisions.
 3. **📓 Exploratory Notebook** — A Jupyter notebook for deep-dive exploratory data analysis and statistical experimentation.
 
-**Students:** Ahmed Chakcha – Mohamed Ali Djemal  
-**Course:** Data Analysis  
-**Instructor:** Dr. Khalil Masmoudi  
-**Academic Year:** 2025–2026
-
 ---
 
 ## 📁 Repository Structure
